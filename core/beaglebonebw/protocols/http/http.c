@@ -9,7 +9,7 @@
 CURL *handle;
 int isEndpoint;
 
-bool socket_sender(const char* endp, int p, const char* _top, const char* _us, const char* _pass, const char* j, const char* t)
+bool socket_sender(const char* endp, int p, const char* _top, const char* j, bool t)
 {
     printf("			*** ");
 	
@@ -52,7 +52,7 @@ bool socket_sender(const char* endp, int p, const char* _top, const char* _us, c
     }
 }
 
-bool init_socket(const char* endp, int p, const char* _us, const char* _pass, const char* ft_http)
+bool init_socket(const char* endp, int p, bool ft_http)
 {
     curl_global_init(CURL_GLOBAL_ALL);
     handle = curl_easy_init();

@@ -3,8 +3,8 @@
 
 #include <stddef.h>
 
-bool socket_sender(const char*, int, const char*, const char*, const char*, const char*, const char*);
-bool init_socket(const char*, int, const char*, const char*, const char*);
+bool socket_sender(const char*, int, const char*, const char*, long);
+bool init_socket(const char*, int,bool);
 size_t write_data(void *, size_t, size_t, void *);
 
 #endif

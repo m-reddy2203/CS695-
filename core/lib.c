@@ -14,16 +14,36 @@ void config(struct device *z)
     z->addr = address;
     z->addr_port = port;
 
-   
+    #ifdef MQTT
+    	z->user_mqtt = user;
+	    z->pass_mqtt = password;
+	    z->top = topic;
+    #endif
+
+    #ifdef MICROCONTROLLER
+        z->ssid_wifi = ssid_WiFi;
+        z->pass_wifi = pass_WiFi;
+    #endif
 
     z->isEnable[0] = isEnable_VoltageIntern;
     z->isEnable[1] = isEnable_TemperatureExtern;
     z->isEnable[2] = isEnable_Humidity;
     z->isEnable[3] = isEnable_Pressure;
+    
+
     z->s_name[0] = "InternalVoltage"; 
     z->s_name[1] = "Temperature";
     z->s_name[2] = "Humidity";
     z->s_name[3] = "Pressure";
+    z->s_name[4] = "SoundLevel";
+    z->s_name[5] = "Light";
+    z->s_name[6] = "X";
+    z->s_name[7] = "Y";
+    z->s_name[8] = "Z";
+    z->s_name[9] = "X";
+    z->s_name[10] = "Y";
+    z->s_name[11] = "Z";
+
     z->interv = interval;
 
 }
@@ -38,8 +58,12 @@ void initPeripherals(long* c)
 	
     init_LEDs();
     // init_i2c(); // Not necesary in BBB
+	
+	init_internal(true);
     init_bme280(true);
-   
+    init_mpu6050(true);
+    init_bh1750(true);
+    init_acoustic(true);
 }
 
 
@@ -57,7 +81,24 @@ void led_blinks(int led, int iter, int usec)	// LED Blink function-> led: 0 Gree
 
 void connectNetwork(struct device *z, bool first_t)
 {	
-	
+	#ifdef MICROCONTROLLER			
+	if (first_t)
+	{				
+		while ( !connectAttempt(z->ssid_wifi, z->pass_wifi) )    /* Attempt to connect to the network via WiFi, in RaspberryPi only check connection to the network. */
+		{
+			 led_blinks(0, 1, 600000);	// Blink in green GREEN - ERROR 0 (No WiFi connection);
+			 led_blinks(1, 1, 600000);	// Blink in green RED - ERROR 0 (No WiFi connection);
+		}
+	}
+	#endif
+	if ( !init_socket(z->addr, z->addr_port, z->user_mqtt, z->pass_mqtt, first_t) )     /* Check Endpoint */
+	{	
+		udelay_basics ( 100000 );
+		led_blinks(1, 3, 70000);	// Blink in green RED - ERROR 1 (Bad connection with the endpoint);
+		#ifdef MICROCONTROLLER
+			restart_basic();
+		#endif
+	}
 }
 
 void pnp_sensors()
@@ -93,7 +134,8 @@ void getData(struct device *z, long *c)
 			strcpy(z->d[i+1], "0");
     }
 
-   
+    /* GET DATA ACOUSTIC */
+    
     
 }
 
@@ -102,7 +144,7 @@ void generateJson(struct device *z)
 {
     int i, aux;
 
-    strcpy(z->json, "{\"apacheserver\":[");
+    strcpy(z->json, "{\"iot2tangle\":[");
     
     aux = 0;
     strcat(z->json, "{\"sensor\":\"Internal\",\"data\":[");
@@ -142,8 +184,8 @@ void generateJson(struct device *z)
 		}
 		strcat(z->json, "]}");
     }
-
-	 
+	
+   
 	strcat(z->json, "],\"device\": \"");
 	strcat(z->json, z->id);
 	strcat(z->json, "\",\"timestamp\": \"0\"}");
@@ -153,7 +195,7 @@ void generateJson(struct device *z)
     #endif
 }
 
-/*bool sendtoEndpoint(struct device *z)
+bool sendtoEndpoint(struct device *z)
 {
     bool b_socket = socket_sender(z->addr, z->addr_port, z->top, z->user_mqtt, z->pass_mqtt, z->json, z->interv);
     if (b_socket)
@@ -162,7 +204,7 @@ void generateJson(struct device *z)
 		led_blinks(1, 3, 70000);	// Blink in green RED - ERROR 1 (Bad connection with the endpoint);
 
     return b_socket;
-}*/
+}
 
 void t_delay(long d, long l) 
 {  

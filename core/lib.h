@@ -10,7 +10,7 @@ void initPeripherals(long *);
 void pnp_sensors();
 void getData(struct device *,long *);
 void generateJson(struct device *);
-/*bool sendtoEndpoint(struct device *);*/
+bool sendtoEndpoint(struct device *);
 void t_delay(long, long); 
 long take_time();
 

@@ -14,7 +14,11 @@ void config(struct device *z)
     z->addr = address;
     z->addr_port = port;
 
-
+    #ifdef MQTT
+    	z->user_mqtt = user;
+	    z->pass_mqtt = password;
+	    z->top = topic;
+    #endif
 
     #ifdef MICROCONTROLLER
         z->ssid_wifi = ssid_WiFi;
@@ -25,13 +29,27 @@ void config(struct device *z)
     z->isEnable[1] = isEnable_TemperatureExtern;
     z->isEnable[2] = isEnable_Humidity;
     z->isEnable[3] = isEnable_Pressure;
-    
+    z->isEnable[4] = isEnable_Acoustic;
+    z->isEnable[5] = isEnable_Light;
+    z->isEnable[6] = isEnable_Accelerometer_X;
+    z->isEnable[7] = isEnable_Accelerometer_Y;
+    z->isEnable[8] = isEnable_Accelerometer_Z;
+    z->isEnable[9] = isEnable_Gyroscope_X;
+    z->isEnable[10] = isEnable_Gyroscope_Y;
+    z->isEnable[11] = isEnable_Gyroscope_Z;
 
     z->s_name[0] = "InternalVoltage"; 
     z->s_name[1] = "Temperature";
     z->s_name[2] = "Humidity";
     z->s_name[3] = "Pressure";
-    
+    z->s_name[4] = "SoundLevel";
+    z->s_name[5] = "Light";
+    z->s_name[6] = "X";
+    z->s_name[7] = "Y";
+    z->s_name[8] = "Z";
+    z->s_name[9] = "X";
+    z->s_name[10] = "Y";
+    z->s_name[11] = "Z";
 
     z->interv = interval;
 
@@ -50,7 +68,9 @@ void initPeripherals(long* c)
 	
 	init_internal(true);
     init_bme280(true);
-    
+    init_mpu6050(true);
+    init_bh1750(true);
+    init_acoustic(true);
 }
 
 
@@ -91,7 +111,9 @@ void connectNetwork(struct device *z, bool first_t)
 void pnp_sensors()
 {
     init_bme280(false);
-    
+    init_mpu6050(false);	
+    init_bh1750(false);	
+    init_acoustic(false);
 }
 
 
@@ -122,7 +144,29 @@ void getData(struct device *z, long *c)
     }
 
     /* GET DATA ACOUSTIC */
-    
+    if (check_acoustic())
+		strcpy(z->d[4], get_acoustic());
+    else	
+		strcpy(z->d[4], "0");
+
+    /* GET DATA LIGHT */
+    if (check_bh1750())
+		strcpy(z->d[5], get_bh1750());
+    else
+		strcpy(z->d[5], "0");
+
+
+    /* GET DATA MPU6050 */
+    if (check_mpu6050())
+    {
+	for (i=0; i<6; i++)
+	    strcpy(z->d[i+6], get_mpu6050(i));
+    }
+    else
+    {
+ 	for (i=0; i<6; i++)
+	    strcpy(z->d[i+6], "0");
+    }
     
 }
 
@@ -172,7 +216,89 @@ void generateJson(struct device *z)
 		strcat(z->json, "]}");
     }
 	
-   
+    if (check_acoustic())
+    {
+		aux = 0;
+		strcat(z->json, ",{\"sensor\":\"Acoustic\",\"data\":[");
+		for (i=0;i<1;i++)
+		{
+			if (z->isEnable[i+4])
+			{
+			if (aux != i) strcat(z->json, ",");
+			strcat(z->json, "{\"");
+			strcat(z->json, z->s_name[i+4]);
+			strcat(z->json, "\":\"");
+			strcat(z->json, z->d[i+4]);
+			strcat(z->json, "\"}");
+			}
+			else
+			aux++;
+		}
+	strcat(z->json, "]}");
+    }
+  
+    if (check_bh1750())
+    {
+		aux = 0;
+		strcat(z->json, ",{\"sensor\":\"Light\",\"data\":[");
+		for (i=0;i<1;i++)
+		{
+			if (z->isEnable[i+5])
+			{
+			if (aux != i) strcat(z->json, ",");
+			strcat(z->json, "{\"");
+			strcat(z->json, z->s_name[i+5]);
+			strcat(z->json, "\":\"");
+			strcat(z->json, z->d[i+5]);
+			strcat(z->json, "\"}");
+			}
+			else
+			aux++;
+		}
+		strcat(z->json, "]}");
+    } 
+
+    if (check_mpu6050())
+    {
+		aux = 0;
+		strcat(z->json, ",{\"sensor\":\"Acelerometer\",\"data\":[");
+		for (i=0;i<3;i++)
+		{
+			if (z->isEnable[i+6])
+			{
+			if (aux != i) strcat(z->json, ",");
+			strcat(z->json, "{\"");
+			strcat(z->json, z->s_name[i+6]);
+			strcat(z->json, "\":\"");
+			strcat(z->json, z->d[i+6]);
+			strcat(z->json, "\"}");
+			}
+			else
+			aux++;
+		}
+		strcat(z->json, "]}");
+    }
+
+    if (check_mpu6050())
+    {
+		aux = 0;
+		strcat(z->json, ",{\"sensor\":\"Gyroscope\",\"data\":[");
+		for (i=0;i<3;i++)
+		{
+			if (z->isEnable[i+9])
+			{
+			if (aux != i) strcat(z->json, ",");
+			strcat(z->json, "{\"");
+			strcat(z->json, z->s_name[i+9]);
+			strcat(z->json, "\":\"");
+			strcat(z->json, z->d[i+9]);
+			strcat(z->json, "\"}");
+			}
+			else
+			aux++;
+		}
+		strcat(z->json, "]}");
+    }	 
 	strcat(z->json, "],\"device\": \"");
 	strcat(z->json, z->id);
 	strcat(z->json, "\",\"timestamp\": \"0\"}");

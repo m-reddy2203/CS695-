@@ -7,7 +7,7 @@
 #include <math.h>
 #include <simpleBBB_I2C.h>
 #include "bme280.h"
-#include "myhead.h"
+
 int fd_bme;
 bme280_calib_data cal;
 bme280_raw_data raw;

@@ -6,7 +6,6 @@
 #include <unistd.h>
 #include <simpleBBB_GPIO.h>
 #include "gpio.h"
-#include "myhead.h"
 
 #define GREEN_LED 60		// GPIO 17 Raspberry Pi 3/4
 #define RED_LED 48		// GPIO 2 Raspberry Pi 3/4

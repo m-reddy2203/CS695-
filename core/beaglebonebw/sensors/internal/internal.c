@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include "internal.h"
-#include "myhead.h"
+
 char buffer[400];
 char *s;
 float num;

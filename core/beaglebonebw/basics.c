@@ -7,9 +7,6 @@
 #include <unistd.h>
 #include "basics.h"
 #include "sensors/bme280/bme280.h"
-#include "sensors/mpu6050/mpu6050.h"
-#include "sensors/bh1750/bh1750.h"
-#include "sensors/acoustic/acoustic.h"
 
 char buffer[100];
 char* s;
@@ -37,12 +34,7 @@ void print_sensors_state()
 	printf ("   Sensors Detection:  ||	");
 	print_bme280();
 	printf("	||	");
-	print_mpu6050();
-	printf("	||	");
-	print_bh1750();
-	printf("	||	");
-	print_acoustic();
-	printf ("	||\n");
+	
 }
 
 void print_json(char* js)

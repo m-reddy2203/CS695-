@@ -6,9 +6,6 @@
 /* Device */
 const char* id_name = "BeagleBoneB-HTTP";
 
-/* HTTP Endpoint Configuration */
-const char* address = "192.168.1.115/sensor_data";  /* Endpoint address, must NOT include 'http://xxx' or 'tcp://xxx' */
-int port = 8080;
 
 /* Enable Sensors */
 bool isEnable_VoltageIntern = true;

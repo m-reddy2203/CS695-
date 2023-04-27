@@ -11,7 +11,7 @@ FILE *fptr;
 
 void init_internal(bool ft)
 {
-	;		// Not necessary in Raspberry Pi
+		// Not necessary in Raspberry Pi
 }
 
 char* get_internal() 

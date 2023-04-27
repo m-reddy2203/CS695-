@@ -14,11 +14,7 @@ void config(struct device *z)
     z->addr = address;
     z->addr_port = port;
 
-    #ifdef MQTT
-    	z->user_mqtt = user;
-	    z->pass_mqtt = password;
-	    z->top = topic;
-    #endif
+
 
     #ifdef MICROCONTROLLER
         z->ssid_wifi = ssid_WiFi;
@@ -35,14 +31,7 @@ void config(struct device *z)
     z->s_name[1] = "Temperature";
     z->s_name[2] = "Humidity";
     z->s_name[3] = "Pressure";
-    z->s_name[4] = "SoundLevel";
-    z->s_name[5] = "Light";
-    z->s_name[6] = "X";
-    z->s_name[7] = "Y";
-    z->s_name[8] = "Z";
-    z->s_name[9] = "X";
-    z->s_name[10] = "Y";
-    z->s_name[11] = "Z";
+    
 
     z->interv = interval;
 
@@ -61,9 +50,7 @@ void initPeripherals(long* c)
 	
 	init_internal(true);
     init_bme280(true);
-    init_mpu6050(true);
-    init_bh1750(true);
-    init_acoustic(true);
+    
 }
 
 

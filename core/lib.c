@@ -53,7 +53,7 @@ void initPeripherals(long* c)
 	
 	init_internal(true);
     init_bme280(true);
-   
+}
 
 
 void led_blinks(int led, int iter, int usec)	// LED Blink function-> led: 0 Green LED, 1 Red LED - iter: iterations quantity - usec: delay time in usec

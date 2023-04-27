@@ -11,8 +11,7 @@ struct device {
    const char *addr;
    int addr_port;
    const char *top;    
-   const char *user_mqtt;
-   const char *pass_mqtt;   
+ 
 
 
    const char *ssid_wifi;

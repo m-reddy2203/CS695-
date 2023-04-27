@@ -80,7 +80,7 @@ void connectNetwork(struct device *z, bool first_t)
 		}
 	}
 	#endif
-	if ( !init_socket(z->addr, z->addr_port, z->user_mqtt, z->pass_mqtt, first_t) )     /* Check Endpoint */
+	if ( !init_socket(z->addr, z->addr_port,  first_t) )     /* Check Endpoint */
 	{	
 		udelay_basics ( 100000 );
 		led_blinks(1, 3, 70000);	// Blink in green RED - ERROR 1 (Bad connection with the endpoint);
@@ -131,7 +131,7 @@ void generateJson(struct device *z)
 {
     int i, aux;
 
-    strcpy(z->json, "{\"iot2tangle\":[");
+    strcpy(z->json, "{\"Apache server\":[");
     
     aux = 0;
     strcat(z->json, "{\"sensor\":\"Internal\",\"data\":[");
@@ -183,7 +183,7 @@ void generateJson(struct device *z)
 
 bool sendtoEndpoint(struct device *z)
 {
-    bool b_socket = socket_sender(z->addr, z->addr_port, z->top, z->user_mqtt, z->pass_mqtt, z->json, z->interv);
+    bool b_socket = socket_sender(z->addr, z->addr_port, z->top, z->json, z->interv);
     if (b_socket)
 	 	led_blinks(0, 2, 60000);	// Blink in green LED;
     else

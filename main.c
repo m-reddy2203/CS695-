@@ -26,8 +26,6 @@ int main ()
 
 	    generateJson(&dev);
 
-	    if ( !sendtoEndpoint(&dev) )	/* Send JSON to the Endpoint, return boolean with the success of the operation */
-			connectNetwork(&dev, false);	/* Only enters it detects a network error */
 
 	    t_delay(dev.interv, take_time() - init_t);  /* compensated delay */
     }    

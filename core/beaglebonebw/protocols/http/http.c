@@ -32,8 +32,7 @@ bool socket_sender(const char* endp, int p, const char* _top, const char* j, lon
         curl_easy_cleanup (handle);
     }
     curl_global_cleanup();
-    
-    // Endpoint response
+   
     printf("\n");
    
     }

@@ -14,11 +14,7 @@ void config(struct device *z)
     z->addr = address;
     z->addr_port = port;
 
-    #ifdef MQTT
-    	z->user_mqtt = user;
-	    z->pass_mqtt = password;
-	    z->top = topic;
-    #endif
+  
 
     #ifdef MICROCONTROLLER
         z->ssid_wifi = ssid_WiFi;
@@ -80,7 +76,7 @@ void connectNetwork(struct device *z, bool first_t)
 		}
 	}
 	#endif
-	if ( !init_socket(z->addr, z->addr_port,  first_t) )     /* Check Endpoint */
+	if ( !init_socket(z->addr, z->addr_port,z->user_wifi, z->pass_wifi,first_t) )     /* Check Endpoint */
 	{	
 		udelay_basics ( 100000 );
 		led_blinks(1, 3, 70000);	// Blink in green RED - ERROR 1 (Bad connection with the endpoint);

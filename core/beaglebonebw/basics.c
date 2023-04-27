@@ -7,7 +7,7 @@
 #include <unistd.h>
 #include "basics.h"
 #include "sensors/bme280/bme280.h"
-
+#include "myhead.h"
 char buffer[100];
 char* s;
 

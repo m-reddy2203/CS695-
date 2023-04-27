@@ -11,8 +11,7 @@ void config(struct device *z)
     /* User assignments */
     z->id = id_name;
         
-    z->addr = address;
-    z->addr_port = port;
+   
 
   
 

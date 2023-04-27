@@ -9,7 +9,7 @@
 CURL *handle;
 int isEndpoint;
 
-bool socket_sender(const char* endp, int p, const char* _top, const char* j, bool t)
+bool socket_sender(const char* endp, int p, const char* _top, const char* j, long t)
 {
     printf("			*** ");
 	

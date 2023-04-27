@@ -7,7 +7,7 @@
 #include "http.h"
 
 CURL *handle;
-int isEndpoint;
+
 
 bool socket_sender(const char* endp, int p, const char* _top, const char* j, long t)
 {
@@ -27,7 +27,7 @@ bool socket_sender(const char* endp, int p, const char* _top, const char* j, lon
         curl_easy_setopt(handle, CURLOPT_URL, endp);
         curl_easy_setopt(handle, CURLOPT_PORT, p);
         curl_easy_setopt(handle, CURLOPT_TIMEOUT, t-3);	/* timeout is: 'Time set by user  minus  3', this is for give the user until the last seconds the opportunity to see if their message was sent to the tangle (when the tangle is congested) */
-        isEndpoint = curl_easy_perform(handle);
+      
 
         curl_easy_cleanup (handle);
     }
@@ -35,22 +35,8 @@ bool socket_sender(const char* endp, int p, const char* _top, const char* j, lon
     
     // Endpoint response
     printf("\n");
-    if (isEndpoint == 0)	
-		return true; 
-    else
-    {
-		if (isEndpoint==28)
-		{
-	        printf("Timeout! The data was sent to the Tangle, but no confirmation was received. It should still be included in Tangle.\nIf you receive this message very often you may need to increase the interval in seconds between data collection.\n");
-	        return false;
-		}
-		else
-		{
-	        printf("Failed to send Data to Endpoint!\n");
-	        return false;
-		}
+   
     }
-}
 
 bool init_socket(const char* endp, int p, bool ft_http)
 {
@@ -62,22 +48,13 @@ bool init_socket(const char* endp, int p, bool ft_http)
         curl_easy_setopt(handle, CURLOPT_URL, endp);
         curl_easy_setopt(handle, CURLOPT_PORT, p);
         curl_easy_setopt(handle, CURLOPT_TIMEOUT, 1);
-        isEndpoint = curl_easy_perform(handle);
+       
 
         curl_easy_cleanup (handle);
     }
     curl_global_cleanup();
 
-    if (isEndpoint == 0)
-    {
-	printf(" -- The Configuration Network is correct, sending data to The Tangle --\n");
-	return true;
-    }
-    else
-    {
-	printf(" -- Endpoint is NOT detected!! -- Please, check your configuration --\n");
-	return false;
-    }
+  
 }
 
 size_t write_data(void *buffer, size_t size, size_t nmemb, void *userp)

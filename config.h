@@ -14,7 +14,7 @@ bool isEnable_Pressure = true;
 
 
 /* Interval of time */
-long interval = 30;    /* Time in seconds between */
+long interval = 10;    /* Time in seconds between */
 
 
 #endif

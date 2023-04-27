@@ -6,7 +6,6 @@
 /* Device */
 const char* id_name = "BeagleBoneB-HTTP";
 
-
 /* Enable Sensors */
 bool isEnable_VoltageIntern = true;
 bool isEnable_TemperatureExtern = true;	/*                     true: Enable  --  false: Disable                            */

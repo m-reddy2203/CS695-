@@ -177,16 +177,6 @@ void generateJson(struct device *z)
     #endif
 }
 
-bool sendtoEndpoint(struct device *z)
-{
-    bool b_socket = socket_sender(z->addr, z->addr_port, z->top, z->json, z->interv);
-    if (b_socket)
-	 	led_blinks(0, 2, 60000);	// Blink in green LED;
-    else
-		led_blinks(1, 3, 70000);	// Blink in green RED - ERROR 1 (Bad connection with the endpoint);
-
-    return b_socket;
-}
 
 void t_delay(long d, long l) 
 {  
